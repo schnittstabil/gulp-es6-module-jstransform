@@ -1,0 +1,47 @@
+{
+  "name": "gulp-es6-module-jstransform",
+  "version": "0.1.0",
+  "description": "Transpile ES6 modules to CommonJS with es6-module-jstransform.",
+  "homepage": "https://github.com/schnittstabil/gulp-es6-module-jstransform",
+  "keywords": [
+    "gulp-plugin",
+    "gulpplugin",
+    "ecmascript",
+    "ecmascript6",
+    "es5",
+    "es6",
+    "harmony",
+    "jstransform",
+    "module",
+    "transpiler"
+  ],
+  "author": "Michael Mayer <michael@schnittstabil.de>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schnittstabil/gulp-es6-module-jstransform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/schnittstabil/gulp-es6-module-jstransform/issues"
+  },
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">= 0.10"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "assert": "^1.1.1",
+    "mocha": "^1.20.1"
+  },
+  "dependencies": {
+    "es6-module-jstransform": "^0.1.4",
+    "gulp-util": "^2.2.18",
+    "through2": "^0.5.1"
+  }
+}
