@@ -1,6 +1,6 @@
 {
   "name": "gulp-es6-module-jstransform",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Transpile ES6 modules to CommonJS with es6-module-jstransform.",
   "license": "MIT",
   "repository": "schnittstabil/gulp-es6-module-jstransform",
@@ -9,9 +9,10 @@
     "name": "Michael Mayer"
   },
   "engines": {
-    "node": ">= 12"
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
   "type": "module",
+  "exports": "./index.js",
   "scripts": {
     "test": "xo && ava"
   },
