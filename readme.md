@@ -1,4 +1,4 @@
-# [gulp](http://gulpjs.com)-[es6-module-jstransform](https://github.com/andreypopp/es6-module-jstransform) [![Build Status](https://travis-ci.org/schnittstabil/gulp-es6-module-jstransform.svg?branch=master)](https://travis-ci.org/schnittstabil/gulp-es6-module-jstransform)
+# [gulp](http://gulpjs.com)-[es6-module-jstransform](https://github.com/andreypopp/es6-module-jstransform)
 
 > Transpile ES6 modules to CommonJS with [es6-module-jstransform](https://github.com/andreypopp/es6-module-jstransform).
 
