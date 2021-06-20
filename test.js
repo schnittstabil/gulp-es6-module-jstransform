@@ -1,4 +1,6 @@
 import {promisify} from 'node:util';
+import path from 'node:path';
+
 import File from 'vinyl';
 import test from 'ava';
 import through from 'through2';
@@ -50,10 +52,11 @@ test('gulp-es6-module-jstransform in buffer mode should handle syntax errors', s
 }));
 
 test('gulp-es6-module-jstransform in buffer mode should let null files pass through', streamTest((t, stream, callback) => {
+	const filePath = path.join(path.sep, 'test', 'null.js');
 	let n = 0;
 
 	stream.pipe(through.obj((file, encoding, done) => {
-		t.is(file.path, '/test/null.js');
+		t.is(file.path, filePath);
 		t.is(file.contents, null);
 		n++;
 		done();
@@ -65,7 +68,7 @@ test('gulp-es6-module-jstransform in buffer mode should let null files pass thro
 	stream.write(new File({
 		cwd: '/',
 		base: '/test/',
-		path: '/test/null.js',
+		path: filePath,
 		contents: null
 	}));
 
