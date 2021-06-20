@@ -1,43 +1,57 @@
-'use strict';
+import {Transform} from 'node:stream';
+import jstransform from 'es6-module-jstransform';
+import PluginError from 'plugin-error';
 
-var through = require('through2'),
-    gutil = require('gulp-util'),
-    transform = require('es6-module-jstransform'),
-    PluginError = gutil.PluginError,
-    PLUGIN_NAME = 'gulp-es6-module-jstransform',
-    ERR_TPL = '<%= lineNumber %>:<%= column %>: <%= description %>';
+const PLUGIN_NAME = 'gulp-es6-module-jstransform';
 
-function gulpEs6ModuleJsTransform() {
-  return through.obj(function(file, enc, callback) {
-    var src,
-        data,
-        tpl;
+const errorToString = error => {
+	let string = '';
 
-    if (file.isNull()) {
-      this.push(file);
-      return callback();
-    }
+	if (error.file && error.file.path) {
+		string += `${error.file.path}:`;
+	}
 
-    if (file.isStream()) {
-      this.emit('error', new PluginError(PLUGIN_NAME, 'Streaming not supported'));
-      return callback();
-    }
+	string += `${error.lineNumber}:${error.column}: ${error.description}`;
 
-    if (file.isBuffer()) {
-      src = file.contents.toString('utf8');
-      try {
-        data = transform(src);
-        file.contents = new Buffer(data.code);
-      } catch (err) {
-        err.file = file;
-        tpl = (file.path ? '<%= file.path %>:' : '') + ERR_TPL;
-        this.emit('error', new PluginError(PLUGIN_NAME, gutil.template(tpl, err)));
-      }
-      this.push(file);
-      return callback();
-    }
-
-  });
+	return string;
 };
 
-module.exports = gulpEs6ModuleJsTransform;
+/**
+ * https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/README.md
+ */
+export default function gulpEs6ModuleJsTransform() {
+	const transformStream = new Transform({objectMode: true});
+
+	/**
+	* @param {Buffer|string} file
+	* @param {string=} encoding - ignored if file contains a Buffer
+	* @param {function(Error, object)} callback - Call this function (optionally with an
+	*          error argument and data) when you are done processing the supplied chunk.
+	*/
+	transformStream._transform = function (file, encoding, callback) {
+		if (file.isNull()) {
+			return callback(null, file);
+		}
+
+		if (file.isStream()) {
+			this.emit('error', new PluginError(PLUGIN_NAME, 'Streams not supported'));
+			return callback();
+		}
+
+		if (file.isBuffer()) {
+			const src = file.contents.toString('utf8');
+			try {
+				const data = jstransform(src);
+				file.contents = Buffer.from(data.code);
+			} catch (error) {
+				error.file = file;
+				this.emit('error', new PluginError(PLUGIN_NAME, errorToString(error)));
+			}
+
+			this.push(file);
+			return callback();
+		}
+	};
+
+	return transformStream;
+}
